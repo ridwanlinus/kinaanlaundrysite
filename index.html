@@ -1,0 +1,900 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Kinaan Laundry — Bersih, Harum, Wangi</title>
+  <meta name="description" content="Kinaan Laundry: layanan cuci kiloan & satuan. Free antar jemput (S&K). Express 8 jam, 1x24 jam, regular 2 hari." />
+  
+  <!-- 1. Import Font Modern: Poppins -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- 2. Import Icons (RemixIcon) agar tampilan lebih visual -->
+  <link href="https://cdn.jsdelivr.net/npm/remixicon@3.5.0/fonts/remixicon.css" rel="stylesheet">
+
+  <style>
+    /* --- CONFIG & VARIABLES --- */
+    :root {
+      --primary: #0ea5e9;       /* Sky Blue - Warna utama segar */
+      --primary-dark: #0284c7;  /* Darker Blue */
+      --accent: #f97316;        /* Orange - Warna aksi/tombol */
+      --bg-color: #f0f9ff;      /* Very light blue background */
+      --card-bg: #ffffff;
+      --text-main: #0f172a;
+      --text-muted: #64748b;
+      --radius: 16px;
+      --shadow: 0 10px 30px -10px rgba(14, 165, 233, 0.15);
+      --shadow-hover: 0 20px 40px -10px rgba(14, 165, 233, 0.25);
+    }
+
+    * { box-sizing: border-box; }
+    
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Poppins', sans-serif; /* Font baru */
+      margin: 0;
+      background-color: var(--bg-color);
+      color: var(--text-main);
+      line-height: 1.6;
+      overflow-x: hidden;
+    }
+
+    /* --- BACKGROUND DECORATION (BUBBLES) --- */
+    .bg-decor {
+      position: fixed;
+      top: 0; left: 0; width: 100%; height: 100%;
+      z-index: -1;
+      overflow: hidden;
+      pointer-events: none;
+    }
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(60px);
+      opacity: 0.6;
+    }
+    .blob-1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #bae6fd; }
+    .blob-2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #fed7aa; opacity: 0.4; }
+
+    .container { max-width: 1000px; margin: 0 auto; padding: 20px; position: relative; }
+
+    /* --- HEADER --- */
+    header {
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 20px 0; margin-bottom: 20px;
+    }
+    .brand { display: flex; gap: 14px; align-items: center; }
+    .logo {
+      width: 54px; height: 54px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+      display: flex; align-items: center; justify-content: center;
+      color: #fff; font-size: 24px; font-weight: 700;
+      box-shadow: 0 8px 20px rgba(14, 165, 233, 0.4);
+    }
+    .brand h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.5px; color: var(--text-main); }
+    .brand p { margin: 0; font-size: 13px; color: var(--text-muted); font-weight: 500; }
+    
+    /* Tombol Header (Hidden on Mobile to use Sticky Footer instead) */
+    .header-cta { display: block; }
+    @media (max-width: 768px) { .header-cta { display: none; } }
+
+    /* --- PROMO BANNER BARU --- */
+    .promo-banner {
+      background: var(--accent); /* Warna oranye terang untuk promo */
+      color: white;
+      padding: 16px 20px;
+      border-radius: var(--radius);
+      margin-bottom: 30px;
+      text-align: center;
+      box-shadow: 0 10px 20px -5px rgba(249, 115, 22, 0.4);
+      animation: pulse 1.5s infinite;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 15px;
+    }
+    .promo-banner h4 {
+      margin: 0;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 1.2;
+    }
+    .promo-banner span {
+      display: block;
+      font-size: 14px;
+      font-weight: 500;
+      opacity: 0.9;
+    }
+    
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.01); }
+      100% { transform: scale(1); }
+    }
+    
+    .promo-icon {
+        font-size: 32px;
+        line-height: 1;
+    }
+    /* --- END PROMO BANNER --- */
+
+
+    /* --- LAYOUT GRID --- */
+    .hero-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 0.8fr; /* Konten kiri lebih lebar dikit */
+      gap: 32px;
+      align-items: start;
+    }
+
+    /* --- CARDS --- */
+    .card {
+      background: var(--card-bg);
+      padding: 28px;
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      border: 1px solid #e2e8f0;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-hover);
+    }
+
+    /* --- LEFT CONTENT --- */
+    .badge-group { display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px; }
+    .badge {
+      display: inline-flex; align-items: center; gap: 6px;
+      padding: 6px 14px;
+      border-radius: 50px;
+      background: #e0f2fe; color: var(--primary-dark);
+      font-weight: 600; font-size: 12px; text-transform: uppercase; letter-spacing: 0.5px;
+    }
+    .badge i { font-size: 14px; }
+
+    h2 { font-size: 32px; margin: 0 0 12px; line-height: 1.2; background: -webkit-linear-gradient(45deg, var(--text-main), var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+    
+    .desc { font-size: 16px; color: var(--text-muted); margin-bottom: 24px; }
+
+    /* Service Chips with Icons */
+    .services-grid {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 12px; margin-bottom: 30px;
+    }
+    .service-item {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      padding: 16px 10px;
+      background: #f8fafc; border-radius: 12px;
+      border: 1px solid #f1f5f9;
+      transition: all 0.2s;
+    }
+    /* Mengatur style SVG dan Icon font agar sama */
+    .service-item i, .service-item svg { 
+      font-size: 24px; 
+      color: var(--primary); 
+      margin-bottom: 8px; 
+      width: 24px; 
+      height: 24px; 
+      fill: var(--primary); /* Untuk SVG */
+    }
+    .service-item span { font-size: 13px; font-weight: 600; color: var(--text-main); }
+    .service-item:hover { background: #fff; border-color: var(--primary); transform: scale(1.05); }
+
+    /* Pricing Cards */
+    .price-container { display: flex; gap: 12px; margin-bottom: 30px; }
+    .price-card {
+      flex: 1; padding: 16px;
+      background: #fff; border: 2px solid #f1f5f9; border-radius: 14px;
+      text-align: center; position: relative; overflow: hidden;
+    }
+    .price-card.popular { border-color: var(--primary); background: #f0f9ff; }
+    .price-card b { display: block; font-size: 16px; margin-bottom: 4px; color: var(--text-main); }
+    .price-card .cost { font-size: 14px; color: var(--primary-dark); font-weight: 700; }
+    .price-card .time { font-size: 12px; color: var(--text-muted); display: block; margin-top: 4px; }
+    .pop-tag {
+      position: absolute; top: 0; right: 0;
+      background: var(--primary); color: white;
+      font-size: 10px; padding: 2px 8px;
+      border-bottom-left-radius: 8px;
+    }
+
+    /* Feature List */
+    .feature-list { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+    .feature-row { display: flex; align-items: center; gap: 10px; font-size: 14px; font-weight: 500; color: var(--text-muted); }
+    .feature-row i { color: #10b981; font-size: 18px; background: #ecfdf5; padding: 4px; border-radius: 50%; }
+
+    /* --- RIGHT CONTENT (FORM) --- */
+    .form-card {
+      position: sticky; top: 20px;
+      background: #ffffff;
+      border-top: 5px solid var(--primary); /* Accent Line */
+    }
+    .form-header { display: flex; align-items: center; gap: 10px; margin-bottom: 20px; }
+    .form-header i { font-size: 24px; color: var(--primary); }
+    .form-header h3 { margin: 0; font-size: 20px; }
+
+    form label { font-size: 13px; font-weight: 600; color: var(--text-muted); margin-bottom: 6px; display: block; }
+    input, select, textarea {
+      width: 100%; padding: 12px 14px; margin-bottom: 16px;
+      border-radius: 10px; border: 2px solid #e2e8f0;
+      background: #f8fafc; font-family: inherit; font-size: 14px; color: var(--text-main);
+      transition: all 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none; border-color: var(--primary); background: #fff;
+      box-shadow: 0 0 0 3px rgba(14, 165, 233, 0.1);
+    }
+
+    /* BUTTONS */
+    .btn {
+      display: inline-flex; align-items: center; justify-content: center; gap: 8px;
+      padding: 14px 24px; border-radius: 12px;
+      background: linear-gradient(to bottom, var(--primary), var(--primary-dark));
+      color: white; font-weight: 600; font-size: 15px;
+      border: none; cursor: pointer; text-decoration: none;
+      box-shadow: 0 4px 12px rgba(14, 165, 233, 0.3);
+      transition: transform 0.2s, opacity 0.2s;
+      width: 100%;
+    }
+    .btn:active { transform: scale(0.98); }
+    .btn.ghost {
+      background: transparent; color: var(--text-muted);
+      box-shadow: none; border: 2px solid #e2e8f0;
+      margin-top: 10px;
+    }
+    .btn.ghost:hover { background: #f1f5f9; color: var(--text-main); }
+
+    /* --- FOOTER STYLE BARU --- */
+    footer { 
+      margin-top: 60px; 
+      padding-top: 40px; 
+      border-top: 1px solid #e2e8f0; 
+      background-color: var(--bg-color);
+    }
+    
+    .footer-content {
+      display: flex;
+      justify-content: space-between;
+      gap: 40px;
+      padding-bottom: 30px;
+      border-bottom: 1px solid #f1f5f9;
+    }
+
+    .footer-left {
+      flex: 1;
+      text-align: left;
+    }
+
+    .footer-left h3 {
+      font-size: 20px;
+      margin: 0 0 12px 0;
+      color: var(--primary-dark);
+    }
+    
+    .footer-info-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 12px;
+      font-size: 14px;
+      color: var(--text-muted);
+    }
+    .footer-info-item i {
+      font-size: 18px;
+      color: var(--primary);
+      margin-top: 2px;
+    }
+    .footer-info-item strong {
+      display: block;
+      color: var(--text-main);
+      font-weight: 600;
+    }
+
+    .footer-right {
+      flex: 1;
+      max-width: 300px;
+    }
+
+    .map-frame {
+      border-radius: 16px; overflow: hidden; border: 2px solid #f1f5f9;
+      box-shadow: var(--shadow); width: 100%; height: 140px; 
+    }
+
+    .footer-bottom {
+      padding: 20px 0;
+      text-align: center;
+      font-size: 13px;
+      color: var(--text-muted);
+      font-weight: 500;
+    }
+
+    /* --- RESPONSIVE --- */
+    @media (max-width: 880px) {
+      .hero-grid { grid-template-columns: 1fr; }
+      .price-container { overflow-x: auto; padding-bottom: 10px; }
+      .price-card { min-width: 110px; }
+      
+      /* Footer Responsive */
+      .footer-content {
+        flex-direction: column;
+        text-align: left;
+      }
+      .footer-right {
+        max-width: 100%;
+      }
+      
+      footer { padding-bottom: 80px; /* Space for sticky bar */ }
+    }
+
+    /* LOADING & THANK YOU */
+    #thankyou {
+      display: none; text-align: center; background: #ecfdf5; border: 1px solid #10b981; color: #064e3b;
+    }
+    #thankyou.show { display: block; animation: fadeIn 0.5s; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .spinner {
+      width: 18px; height: 18px; border: 3px solid rgba(255,255,255,0.3); 
+      border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* PERUBAHAN: Tambahkan style untuk Mobile Sticky Button */
+    .mobile-sticky {
+      display: none; /* Sembunyikan di desktop */
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 1000;
+      width: calc(100% - 40px);
+      max-width: 300px;
+    }
+    @media (max-width: 768px) {
+      .mobile-sticky {
+        display: block; /* Tampilkan di mobile */
+      }
+    }
+
+    /* TAMBAHAN: Style untuk Pop-up Syarat & Ketentuan */
+    .modal {
+      display: none; /* Hidden by default */
+      position: fixed; /* Stay in place */
+      z-index: 2000; /* Sit on top, di atas mobile-sticky */
+      left: 0;
+      top: 0;
+      width: 100%; /* Full width */
+      height: 100%; /* Full height */
+      overflow: auto; /* Enable scroll if needed */
+      background-color: rgba(0,0,0,0.5); /* Black w/ opacity */
+      animation: fadeIn 0.3s;
+    }
+
+    .modal-content {
+      background-color: var(--card-bg);
+      margin: 5% auto; /* 5% from the top and centered */
+      padding: 30px;
+      border-radius: var(--radius);
+      width: 90%;
+      max-width: 600px;
+      max-height: 80vh;
+      overflow-y: auto;
+      box-shadow: var(--shadow-hover);
+      position: relative;
+      animation: slideIn 0.4s;
+    }
+
+    @keyframes slideIn {
+      from { transform: translateY(-50px); opacity: 0; }
+      to { transform: translateY(0); opacity: 1; }
+    }
+
+    .close-btn {
+      color: var(--text-muted);
+      position: absolute;
+      top: 15px;
+      right: 20px;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+
+    .close-btn:hover,
+    .close-btn:focus {
+      color: var(--text-main);
+    }
+
+    .modal-content h3 {
+      margin-top: 0;
+      color: var(--primary-dark);
+      font-size: 24px;
+    }
+
+    .modal-content h4 {
+      color: var(--text-main);
+      font-size: 18px;
+      margin-top: 25px;
+      margin-bottom: 10px;
+      border-bottom: 2px solid var(--bg-color);
+      padding-bottom: 5px;
+    }
+    
+    .modal-content ul {
+      padding-left: 20px;
+    }
+
+    .modal-content li {
+      margin-bottom: 8px;
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+
+    .modal-content p {
+      color: var(--text-muted);
+      font-size: 14px;
+    }
+    
+    /* TAMBAHAN: Style untuk tombol link Syarat & Ketentuan */
+    .tnc-link {
+      display: block;
+      width: 100%;
+      text-align: center;
+      margin-top: 10px;
+      font-size: 13px;
+      color: var(--primary);
+      text-decoration: none;
+      font-weight: 600;
+      cursor: pointer;
+      transition: color 0.2s;
+    }
+    .tnc-link:hover {
+      color: var(--primary-dark);
+      text-decoration: underline;
+    }
+    
+    /* TAMBAHAN: Style untuk bagian Area Layanan */
+    .service-area-card {
+      padding: 20px; 
+      border: none; 
+      box-shadow: none; 
+      background: rgba(255,255,255,0.6); 
+      text-align: left;
+    }
+    .service-area-card h3 {
+      margin: 0 0 12px 0;
+      font-size: 18px;
+      color: var(--primary-dark);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .service-area-card h3 i {
+      font-size: 20px;
+      color: var(--primary);
+    }
+    .service-area-card p {
+      margin: 0;
+      font-size: 14px;
+      color: var(--text-muted);
+      line-height: 1.7;
+    }
+    .service-area-card strong {
+      color: var(--text-main); 
+      font-weight: 600;
+    }
+
+  </style>
+</head>
+<body>
+
+  <!-- Background Blob Decorations -->
+  <div class="bg-decor">
+    <div class="blob blob-1"></div>
+    <div class="blob blob-2"></div>
+  </div>
+
+  <div class="container">
+    
+    <header>
+      <div class="brand">
+        <div class="logo"><i class="ri-t-shirt-air-line"></i></div>
+        <div>
+          <h1>Kinaan Laundry</h1>
+          <p>Bersih, Harum, Wangi & Cepat</p>
+        </div>
+      </div>
+      <div class="header-cta">
+        <a href="#order-form" class="btn" style="width: auto; padding: 10px 20px; font-size: 14px;">
+          <i class="ri-whatsapp-line"></i> Order Sekarang
+        </a>
+      </div>
+    </header>
+    
+    <!-- PROMO BANNER BARU: Diskon 20% Online -->
+    <div class="promo-banner">
+      <i class="ri-fire-line promo-icon"></i>
+      <div>
+        <h4>DISKON 20% KHUSUS ONLINE!</h4>
+        <span>Berlaku untuk semua layanan jika order melalui formulir di website ini.</span>
+      </div>
+    </div>
+    <!-- END PROMO BANNER -->
+
+    <main class="hero-grid">
+      
+      <!-- LEFT COLUMN: Info & Selling Points -->
+      <div>
+        <div class="badge-group">
+          <span class="badge"><i class="ri-time-line"></i> Express 8 Jam</span>
+          <span class="badge"><i class="ri-truck-line"></i> Antar Jemput</span>
+        </div>
+        
+        <h2>Solusi Pakaian Bersih <br>Tanpa Ribet di Karawang.</h2>
+        <p class="desc">Layanan cuci kiloan & satuan premium. Kami jemput pakaian kotor Anda, dan antarkan kembali dalam keadaan bersih, wangi, dan rapi.</p>
+
+        <!-- Services with Icons -->
+        <div class="services-grid">
+          <div class="service-item">
+            <i class="ri-shopping-basket-2-line"></i>
+            <span>Kiloan</span>
+          </div>
+          <div class="service-item">
+            <i class="ri-shirt-line"></i>
+            <span>Satuan</span>
+          </div>
+          <div class="service-item">
+            <!-- PERBAIKAN: Kembalikan ke SVG agar icon setrika pasti muncul -->
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+              <path d="M21 11 C21 7.134 17.866 4 14 4 C10.134 4 7 7.134 7 11 L7 16 L3 16 L3 18 L21 18 L21 16 L9 16 L9 11 C9 8.239 11.239 6 14 6 C16.761 6 19 8.239 19 11 L19 16 L21 16 L21 11 Z M7 18 L21 18 L21 20 L7 20 L7 18 Z" />
+            </svg>
+            <span>Setrika</span>
+          </div>
+          <div class="service-item">
+            <i class="ri-motorbike-line"></i>
+            <span>Antar Jemput</span>
+          </div>
+        </div>
+
+        <!-- Pricing Cards -->
+        <div class="price-container">
+          <div class="price-card">
+            <b>Regular</b>
+            <span class="cost">Rp 6.500</span>
+            <span class="time">2 Hari</span>
+          </div>
+          <div class="price-card popular">
+            <div class="pop-tag">Terlaris</div>
+            <b>24 Jam</b>
+            <span class="cost">Rp 8.000</span>
+            <span class="time">1 Hari</span>
+          </div>
+          <div class="price-card">
+            <b>Express</b>
+            <span class="cost">Rp 15.000</span>
+            <span class="time">8 Jam</span>
+          </div>
+        </div>
+
+        <!-- Features Checkmark -->
+        <div class="feature-list card" style="padding: 20px; border: none; box-shadow: none; background: rgba(255,255,255,0.6);">
+          <div class="feature-row"><i class="ri-check-line"></i> Wangi Tahan Lama</div>
+          <div class="feature-row"><i class="ri-check-line"></i> Mesin Higienis</div>
+          <div class="feature-row"><i class="ri-check-line"></i> Deterjen Premium</div>
+          <div class="feature-row"><i class="ri-check-line"></i> Tepat Waktu</div>
+        </div>
+
+        <!-- TAMBAHAN: Bagian Area Layanan -->
+        <div class="service-area-card card">
+          <h3><i class="ri-compass-3-line"></i> Area Layanan Kami</h3>
+          <p>
+            Kinaan Laundry melayani area:
+            <strong>Adiarsa Timur, Adiarsa Barat, Karawang Kulon, Karawang Wetan, Karangpawitan, Nagasari, Tanjungpura, Tanjungmekar, Perumnas Karaba,</strong> serta area sekitar seperti <strong>Galuh Mas (cluster tertentu), Wadas, Perumnas Telukjambe, Bintang Alam,</strong> dan wilayah lain yang masih berada dalam radius ±4 KM dari lokasi kami.
+          </p>
+        </div>
+
+      </div>
+
+      <!-- RIGHT COLUMN: Form (Sticky) -->
+      <aside>
+        <div class="card form-card" id="order-form">
+          <div class="form-header">
+            <i class="ri-file-list-3-line"></i>
+            <h3>Form Order</h3>
+          </div>
+          
+          <form id="form-logic">
+            <label for="name"><i class="ri-user-smile-line"></i> Nama Lengkap</label>
+            <input type="text" id="name" placeholder="Cth: Bu Siti" required />
+
+            <label for="wa"><i class="ri-whatsapp-line"></i> Nomor WhatsApp</label>
+            <input type="tel" id="wa" placeholder="08xxxxxxxxxx" required />
+
+            <label for="address"><i class="ri-map-pin-line"></i> Alamat / Patokan</label>
+            <input type="text" id="address" placeholder="Cth: Perum Griya No 5 (Pagar Hitam)" required />
+
+            <div style="display: flex; gap: 10px;">
+              <div style="flex: 1;">
+                <label for="service">Layanan</label>
+                <select id="service">
+                  <option value="Kiloan Regular">Kiloan (2 Hari)</option>
+                  <option value="Kiloan 24 Jam">Kiloan (1 Hari)</option>
+                  <option value="Kiloan Express">Express (8 Jam)</option>
+                  <option value="Satuan">Satuan (Bedcover/Sprei/Karpet/Dll.)</option>
+                  <option value="Setrika">Setrika Saja</option>
+          <option value="Cuci Kering Lipat">Cuci Kering Lipat </option>
+                </select>
+              </div>
+              <div style="width: 35%;">
+                <label for="weight">Berat (Kg)</label>
+                <select id="weight">
+                  <option value="<3">&lt; 3kg</option>
+                  <option value="3-5">3-5kg</option>
+                  <option value="5-8">5-8kg</option>
+                  <option value=">8">&gt; 8kg</option>
+                </select>
+              </div>
+            </div>
+
+            <label for="note">Catatan (Opsional)</label>
+            <textarea id="note" rows="2" placeholder="Cth: Bagian sablon jangan disetrika"></textarea>
+
+            <button type="submit" class="btn" id="submit-btn">
+              Kirim & Order via WhatsApp <i class="ri-arrow-right-line"></i>
+            </button>
+            <button type="button" id="clear" class="btn ghost">Reset Form</button>
+            
+            <!-- TAMBAHAN: Tombol untuk membuka pop-up Syarat & Ketentuan -->
+            <a id="show-tnc-btn" class="tnc-link">Baca Syarat & Ketentuan</a>
+          </form>
+          
+          <p style="font-size: 12px; color: var(--text-muted); margin-top: 12px; text-align: center;">
+            <i class="ri-lock-2-line" style="vertical-align: middle;"></i> Data aman. Admin akan konfirmasi via WA.
+          </p>
+        </div>
+
+        <!-- Thank You Section (Hidden) -->
+        <div id="thankyou" class="card" style="margin-top: 20px;">
+          <i class="ri-checkbox-circle-fill" style="font-size: 40px; color: #10b981;"></i>
+          <h3>Pesanan Diterima!</h3>
+          <p>Mengalihkan ke WhatsApp...</p>
+          <a href="#" id="manual-wa-link" style="font-weight: 600; color: var(--primary);">Klik disini jika tidak otomatis</a>
+        </div>
+
+      </aside>
+
+    </main>
+
+    <!-- FOOTER DIPERBARUI -->
+    <footer>
+      <div class="footer-content">
+        
+        <!-- BAGIAN KIRI: Info Kontak -->
+        <div class="footer-left">
+          <h3>Kinaan Laundry</h3>
+          
+          <div class="footer-info-item">
+            <i class="ri-map-pin-line"></i>
+            <div>
+              <strong>Alamat Laundry</strong>
+              Jalan East Adiarsa, Karawang, Jawa Barat<br>
+              (M8F6+VM East Adiarsa)
+            </div>
+          </div>
+
+          <div class="footer-info-item">
+            <i class="ri-user-star-line"></i>
+            <div>
+              <strong>Owner / Kontak</strong>
+              M. Ridwan Hakim<br>
+              <a href="#" id="footer-wa-link" style="text-decoration: none; color: var(--primary-dark); font-weight: 600;">
+                0895375647302
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <!-- BAGIAN KANAN: Maps -->
+        <div class="footer-right">
+          <div class="map-frame">
+            <iframe src="https://www.google.com/maps?q=M8F6%2BVM+East+Adiarsa,+Karawang,+West+Java&output=embed" width="100%" height="140" style="border:0; display:block;" allowfullscreen="" loading="lazy"></iframe>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- BAGIAN BAWAH: Copyright -->
+      <div class="footer-bottom">
+        Copyright 2025 Kinaan Laundry. All Right Reserved. Desain Website oleh Ridwan
+      </div>
+    </footer>
+
+  </div>
+
+  <!-- Mobile Sticky Button -->
+  <div class="mobile-sticky">
+    <a href="#order-form" class="btn">
+      <i class="ri-whatsapp-line" style="font-size: 18px;"></i> Order Sekarang
+    </a>
+  </div>
+
+  <!-- TAMBAHAN: Struktur Pop-up Syarat & Ketentuan -->
+  <div id="tnc-modal" class="modal">
+    <div class="modal-content">
+      <span class="close-btn">&times;</span>
+      <h3>Syarat & Ketentuan Layanan Antar Jemput</h3>
+      
+      <h4>Area Layanan</h4>
+      <ul>
+        <li>Antar jemput berlaku untuk pelanggan dalam radius maksimal 4 KM dari alamat resmi Kinaan Laundry.</li>
+        <li>Di luar radius 4 KM dapat dikenakan biaya tambahan atau ditolak jika tidak memungkinkan.</li>
+      </ul>
+
+      <h4>Waktu Antar Jemput</h4>
+      <ul>
+        <li>Jadwal antar jemput hanya tersedia pada pukul 18.00 sampai 21.00.</li>
+        <li>Jika kuota penuh, penjadwalan dialihkan ke hari berikutnya.</li>
+      </ul>
+
+      <h4>Layanan Express</h4>
+      <ul>
+        <li>Express 8 jam tidak tersedia untuk layanan antar jemput.</li>
+        <li>Untuk pelanggan antar jemput, waktu pengerjaan minimal adalah 1 hari kerja.</li>
+        <li>Express hanya berlaku bagi pelanggan drop-off langsung ke lokasi.</li>
+      </ul>
+
+      <h4>Jadwal Penjemputan & Pengantaran</h4>
+      <ul>
+        <li>Penjemputan dilakukan sesuai slot waktu yang disepakati.</li>
+        <li>Pengantaran dilakukan setelah laundry selesai dan pelanggan menerima notifikasi.</li>
+      </ul>
+
+      <h4>Minimal Order</h4>
+      <p>Berlaku minimal order sesuai ketentuan yang digunakan oleh Kinaan Laundry.</p>
+
+      <h4>Biaya Tambahan</h4>
+      <ul>
+        <li>Radius 4 KM gratis antar jemput.</li>
+        <li>Di luar radius tersebut berlaku biaya tambahan sesuai jarak.</li>
+      </ul>
+
+      <h4>Barang Hilang atau Tertukar</h4>
+      <ul>
+        <li>Pelanggan wajib memeriksa jumlah dan jenis pakaian saat penjemputan.</li>
+        <li>Klaim barang hilang atau tertukar maksimal 24 jam setelah barang diterima.</li>
+      </ul>
+
+      <h4>Pembayaran</h4>
+      <ul>
+        <li>Pembayaran dapat dilakukan sebelum atau setelah pengantaran.</li>
+        <li>Tersedia metode transfer bank, e-wallet, atau tunai.</li>
+      </ul>
+
+      <h4>Pembatalan</h4>
+      <ul>
+        <li>Pembatalan penjemputan minimal 1 jam sebelum jadwal.</li>
+        <li>Jika petugas sudah tiba di lokasi, pembatalan tidak dianggap sah.</li>
+      </ul>
+
+      <h4>Kondisi Barang</h4>
+      <ul>
+        <li>Kinaan Laundry tidak bertanggung jawab atas kerusakan yang terjadi akibat bahan rapuh, mudah luntur, atau noda permanen.</li>
+        <li>Pelanggan dapat menambahkan catatan khusus untuk pakaian tertentu.</li>
+      </ul>
+
+      <h4>Ketentuan Tambahan</h4>
+      <ul>
+        <li>Dengan menggunakan layanan antar jemput, pelanggan dianggap menyetujui seluruh syarat dan ketentuan ini.</li>
+        <li>Ketentuan dapat diperbarui sewaktu-waktu tanpa pemberitahuan sebelumnya.</li>
+      </ul>
+    </div>
+  </div>
+
+  <!-- SCRIPT: LOGIKA TETAP SAMA (AMAN) -->
+  <script>
+    // PERUBAHAN: Centralisasi konfigurasi agar mudah diubah
+    const config = {
+      waNumber: "62895375647302", // Nomor WA utama, ganti di sini saja
+      gasUrl: "https://script.google.com/macros/s/AKfycbw1-s_EeGayPlbfx72BfhQsB7SObJTYQ9jlxkZPICUZX5bso9nyPQT6gLoam0M85cHY/exec"
+    };
+
+    // Set link WA di footer secara dinamis
+    document.getElementById('footer-wa-link').href = `https://wa.me/${config.waNumber}`;
+
+    const form = document.getElementById('form-logic');
+    const submitBtn = document.getElementById('submit-btn');
+    const thank = document.getElementById('thankyou');
+    const manualWaLink = document.getElementById('manual-wa-link');
+    const clearBtn = document.getElementById('clear');
+    const formContainer = document.getElementById('order-form');
+    
+    form.addEventListener('submit', function(e){
+      e.preventDefault();
+
+      const originalText = submitBtn.innerHTML;
+      submitBtn.innerHTML = '<div class="spinner"></div> Mengirim...';
+      submitBtn.disabled = true;
+      submitBtn.style.opacity = "0.7";
+
+      const data = {
+        name: document.getElementById('name').value.trim(),
+        wa: document.getElementById('wa').value.trim(),
+        address: document.getElementById('address').value.trim(),
+        service: document.getElementById('service').value,
+        weight: document.getElementById('weight').value,
+        note: document.getElementById('note').value.trim()
+      };
+
+      console.log('Data:', data);
+
+      const message = `Halo Kinaan Laundry, saya *${data.name}* (${data.wa}) mau order laundry.
+%0A*Layanan:* ${data.service} (${data.weight})
+%0A*Alamat:* ${data.address}
+%0A*Catatan:* ${data.note || '-'}
+%0A%0AMohon dijemput. Terima kasih.`;
+
+      const waUrl = `https://wa.me/${config.waNumber}?text=${encodeURIComponent(message)}`;
+      manualWaLink.href = waUrl;
+
+      fetch(config.gasUrl, {
+        method: "POST",
+        mode: "no-cors",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(() => {
+        finishAndRedirect(waUrl);
+      })
+      .catch(error => {
+        console.error('Error:', error);
+        finishAndRedirect(waUrl);
+      });
+    });
+
+    function finishAndRedirect(url) {
+      formContainer.style.display = 'none';
+      thank.classList.add("show");
+      thank.scrollIntoView({ behavior: "smooth", block: "center" });
+
+      setTimeout(() => {
+        window.location.href = url;
+      }, 1500);
+    }
+
+    clearBtn.addEventListener('click', () => {
+      form.reset();
+      formContainer.style.display = 'block';
+      thank.classList.remove("show");
+      submitBtn.innerHTML = 'Kirim & Order via WhatsApp <i class="ri-arrow-right-line"></i>';
+      submitBtn.disabled = false;
+      submitBtn.style.opacity = "1";
+    });
+
+    // TAMBAHAN: Logika untuk Pop-up Syarat & Ketentuan
+    const modal = document.getElementById("tnc-modal");
+    const btn = document.getElementById("show-tnc-btn");
+    const span = document.getElementsByClassName("close-btn")[0];
+
+    // Ketika tombol diklik, buka modal
+    btn.onclick = function() {
+      modal.style.display = "flex";
+    }
+
+    // Ketika tombol (x) diklik, tutup modal
+    span.onclick = function() {
+      modal.style.display = "none";
+    }
+
+    // Ketika pengguna mengklik di luar modal, tutup modal
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+  </script>
+
+</body>
+</html>
