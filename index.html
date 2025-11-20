@@ -248,86 +248,11 @@
     }
     .btn.ghost:hover { background: #f1f5f9; color: var(--text-main); }
 
-    /* --- FOOTER STYLE BARU --- */
-    footer { 
-      margin-top: 60px; 
-      padding-top: 40px; 
-      border-top: 1px solid #e2e8f0; 
-      background-color: var(--bg-color);
-    }
-    
-    .footer-content {
-      display: flex;
-      justify-content: space-between;
-      gap: 40px;
-      padding-bottom: 30px;
-      border-bottom: 1px solid #f1f5f9;
-    }
-
-    .footer-left {
-      flex: 1;
-      text-align: left;
-    }
-
-    .footer-left h3 {
-      font-size: 20px;
-      margin: 0 0 12px 0;
-      color: var(--primary-dark);
-    }
-    
-    .footer-info-item {
-      display: flex;
-      align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 12px;
-      font-size: 14px;
-      color: var(--text-muted);
-    }
-    .footer-info-item i {
-      font-size: 18px;
-      color: var(--primary);
-      margin-top: 2px;
-    }
-    .footer-info-item strong {
-      display: block;
-      color: var(--text-main);
-      font-weight: 600;
-    }
-
-    .footer-right {
-      flex: 1;
-      max-width: 300px;
-    }
-
-    .map-frame {
-      border-radius: 16px; overflow: hidden; border: 2px solid #f1f5f9;
-      box-shadow: var(--shadow); width: 100%; height: 140px; 
-    }
-
-    .footer-bottom {
-      padding: 20px 0;
-      text-align: center;
-      font-size: 13px;
-      color: var(--text-muted);
-      font-weight: 500;
-    }
-
     /* --- RESPONSIVE --- */
     @media (max-width: 880px) {
       .hero-grid { grid-template-columns: 1fr; }
       .price-container { overflow-x: auto; padding-bottom: 10px; }
       .price-card { min-width: 110px; }
-      
-      /* Footer Responsive */
-      .footer-content {
-        flex-direction: column;
-        text-align: left;
-      }
-      .footer-right {
-        max-width: 100%;
-      }
-      
-      footer { padding-bottom: 80px; /* Space for sticky bar */ }
     }
 
     /* LOADING & THANK YOU */
@@ -487,6 +412,118 @@
       font-weight: 600;
     }
 
+    /* --- PERUBAHAN BESAR: STYLE FOOTER BARU --- */
+    footer {
+      margin-top: 80px;
+      background-color: #0f172a; /* Latar belakang gelap untuk kontras */
+      color: #cbd5e1; /* Warna teks yang lebih terang untuk footer */
+      padding: 60px 0 20px 0;
+    }
+
+    .footer-main {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 0 20px;
+      display: grid;
+      grid-template-columns: 2fr 1fr 1.5fr 1.5fr; /* Rasio kolom yang seimbang */
+      gap: 40px;
+      margin-bottom: 40px;
+    }
+
+    .footer-col h4 {
+      font-size: 18px;
+      font-weight: 600;
+      color: #ffffff; /* Judul kolom putih agar menonjol */
+      margin-bottom: 20px;
+      position: relative;
+      padding-bottom: 10px;
+    }
+
+    .footer-col h4::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      width: 40px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 2px;
+    }
+
+    /* Kolom 1: Brand & Deskripsi */
+    .footer-col-1 .brand {
+      align-items: flex-start;
+      margin-bottom: 15px;
+    }
+    .footer-col-1 p {
+      font-size: 14px;
+      line-height: 1.7;
+      color: var(--text-muted);
+    }
+
+    /* Kolom 2 & 3: Links & Contact */
+    .footer-col ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+    .footer-col ul li {
+      margin-bottom: 12px;
+    }
+    .footer-col ul li a {
+      color: #cbd5e1;
+      text-decoration: none;
+      font-size: 14px;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .footer-col ul li a:hover {
+      color: var(--primary);
+    }
+    .footer-col ul li a i {
+      font-size: 16px;
+      color: var(--primary);
+    }
+
+    /* Kolom 4: Map */
+    .map-frame {
+      border-radius: var(--radius); overflow: hidden; border: 2px solid rgba(255,255,255,0.1);
+      box-shadow: var(--shadow); width: 100%; height: 180px; 
+    }
+
+    /* Footer Bottom */
+    .footer-bottom {
+      max-width: 1000px;
+      margin: 0 auto;
+      padding: 20px;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      text-align: center;
+      font-size: 13px;
+      color: #94a3b8;
+    }
+
+    /* Responsive Footer */
+    @media (max-width: 880px) {
+      .footer-main {
+        grid-template-columns: 1fr; /* Menjadi satu kolom di mobile */
+        gap: 30px;
+        text-align: center;
+      }
+      .footer-col h4::after {
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      .footer-col-1 .brand {
+        justify-content: center;
+      }
+      .footer-col ul {
+        text-align: left;
+        display: inline-block;
+      }
+    }
+
   </style>
 </head>
 <body>
@@ -588,7 +625,8 @@
         </div>
 
         <!-- TAMBAHAN: Bagian Area Layanan -->
-        <div class="service-area-card card">
+        <!-- PERBAIKAN: Tambahkan ID untuk link di footer -->
+        <div class="service-area-card card" id="service-area-card">
           <h3><i class="ri-compass-3-line"></i> Area Layanan Kami</h3>
           <p>
             Kinaan Laundry melayani area:
@@ -668,51 +706,59 @@
 
     </main>
 
-    <!-- FOOTER DIPERBARUI -->
-    <footer>
-      <div class="footer-content">
-        
-        <!-- BAGIAN KIRI: Info Kontak -->
-        <div class="footer-left">
-          <h3>Kinaan Laundry</h3>
-          
-          <div class="footer-info-item">
-            <i class="ri-map-pin-line"></i>
-            <div>
-              <strong>Alamat Laundry</strong>
-              Jalan East Adiarsa, Karawang, Jawa Barat<br>
-              (M8F6+VM East Adiarsa)
-            </div>
-          </div>
-
-          <div class="footer-info-item">
-            <i class="ri-user-star-line"></i>
-            <div>
-              <strong>Owner / Kontak</strong>
-              M. Ridwan Hakim<br>
-              <a href="#" id="footer-wa-link" style="text-decoration: none; color: var(--primary-dark); font-weight: 600;">
-                0895375647302
-              </a>
-            </div>
-          </div>
-        </div>
-
-        <!-- BAGIAN KANAN: Maps -->
-        <div class="footer-right">
-          <div class="map-frame">
-            <iframe src="https://www.google.com/maps?q=M8F6%2BVM+East+Adiarsa,+Karawang,+West+Java&output=embed" width="100%" height="140" style="border:0; display:block;" allowfullscreen="" loading="lazy"></iframe>
-          </div>
-        </div>
-
-      </div>
-
-      <!-- BAGIAN BAWAH: Copyright -->
-      <div class="footer-bottom">
-        Copyright 2025 Kinaan Laundry. All Right Reserved. Desain Website oleh Ridwan
-      </div>
-    </footer>
-
   </div>
+
+  <!-- PERUBAHAN BESAR: STRUKTUR FOOTER BARU -->
+  <footer>
+    <div class="footer-main">
+      
+      <!-- Kolom 1: Brand & Deskripsi (Sosial Media Dihapus) -->
+      <div class="footer-col footer-col-1">
+        <div class="brand">
+          <div class="logo"><i class="ri-t-shirt-air-line"></i></div>
+          <div>
+            <h1 style="font-size: 22px; color: #ffffff;">Kinaan Laundry</h1>
+            <p style="color: #94a3b8; margin: 0;">Bersih, Harum, Wangi & Cepat</p>
+          </div>
+        </div>
+        <p>Solusi cuci laundry profesional dan terpercaya di Karawang. Kami menjemput dan mengantarkan pakaian Anda kembali dengan bersih dan wangi.</p>
+      </div>
+
+      <!-- Kolom 2: Layanan Cepat -->
+      <div class="footer-col footer-col-2">
+        <h4>Layanan Cepat</h4>
+        <ul>
+          <li><a href="#order-form"><i class="ri-arrow-right-s-line"></i> Form Order</a></li>
+          <li><a href="#" id="footer-tnc-link"><i class="ri-arrow-right-s-line"></i> Syarat & Ketentuan</a></li>
+          <li><a href="#service-area-card"><i class="ri-arrow-right-s-line"></i> Area Layanan</a></li>
+          <!-- PERBAIKAN: Hapus link "Tentang Kami" -->
+        </ul>
+      </div>
+
+      <!-- Kolom 3: Hubungi Kami -->
+      <div class="footer-col footer-col-3">
+        <h4>Hubungi Kami</h4>
+        <ul>
+          <li><a href="https://wa.me/62895375647302"><i class="ri-whatsapp-line"></i> 0895-3756-47302</a></li>
+          <li><a href="#"><i class="ri-map-pin-line"></i> Jl. East Adiarsa, Karawang</a></li>
+          <li><a href="mailto:info@kinaanlaundry.com"><i class="ri-mail-line"></i> info@kinaanlaundry.com</a></li>
+        </ul>
+      </div>
+
+      <!-- Kolom 4: Lokasi Kami -->
+      <div class="footer-col footer-col-4">
+        <h4>Lokasi Kami</h4>
+        <div class="map-frame">
+          <iframe src="https://www.google.com/maps?q=M8F6%2BVM+East+Adiarsa,+Karawang,+West+Java&output=embed" width="100%" height="180" style="border:0; display:block;" allowfullscreen="" loading="lazy"></iframe>
+        </div>
+      </div>
+
+    </div>
+
+    <div class="footer-bottom">
+      <p>&copy; 2025 Kinaan Laundry. All Rights Reserved. Desain Website oleh <a href="https://github.com/ridwanhakim95" style="color: var(--primary); text-decoration: none;">Ridwan</a>.</p>
+    </div>
+  </footer>
 
   <!-- Mobile Sticky Button -->
   <div class="mobile-sticky">
@@ -801,9 +847,6 @@
       gasUrl: "https://script.google.com/macros/s/AKfycbw1-s_EeGayPlbfx72BfhQsB7SObJTYQ9jlxkZPICUZX5bso9nyPQT6gLoam0M85cHY/exec"
     };
 
-    // Set link WA di footer secara dinamis
-    document.getElementById('footer-wa-link').href = `https://wa.me/${config.waNumber}`;
-
     const form = document.getElementById('form-logic');
     const submitBtn = document.getElementById('submit-btn');
     const thank = document.getElementById('thankyou');
@@ -877,11 +920,15 @@
     const modal = document.getElementById("tnc-modal");
     const btn = document.getElementById("show-tnc-btn");
     const span = document.getElementsByClassName("close-btn")[0];
+    const footerTncLink = document.getElementById('footer-tnc-link'); // Tambahkan link dari footer
 
-    // Ketika tombol diklik, buka modal
-    btn.onclick = function() {
-      modal.style.display = "flex";
-    }
+    // Fungsi untuk membuka modal
+    const openModal = () => modal.style.display = "flex";
+    
+    // Event listener untuk tombol di form
+    btn.onclick = openModal;
+    // Event listener untuk link di footer
+    footerTncLink.onclick = openModal;
 
     // Ketika tombol (x) diklik, tutup modal
     span.onclick = function() {
